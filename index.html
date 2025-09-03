@@ -227,10 +227,10 @@
             }
             
             init() {
-                this.setupFrames();
                 this.updateTime();
                 this.calculateNextReload();
-                this.determineCurrentReport();
+                this.determineCurrentReport(); // ← Esto debe ir ANTES de setupFrames
+                this.setupFrames();
                 this.startScheduleCheck();
                 this.startReloadTimer();
                 this.hideLoading();
