@@ -1,0 +1,346 @@
+!DOCTYPE html
+html lang=es
+head
+    meta charset=UTF-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    titleDashboard Corporativo - Informes Power BItitle
+    style
+         {
+            margin 0;
+            padding 0;
+            box-sizing border-box;
+        }
+        
+        body {
+            font-family 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color white;
+            overflow hidden;
+        }
+        
+        .header {
+            background rgba(0, 0, 0, 0.3);
+            padding 15px 30px;
+            display flex;
+            justify-content space-between;
+            align-items center;
+            backdrop-filter blur(10px);
+            border-bottom 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size 24px;
+            font-weight bold;
+            color #fff;
+        }
+        
+        .status-info {
+            display flex;
+            gap 30px;
+            align-items center;
+        }
+        
+        .status-item {
+            text-align center;
+        }
+        
+        .status-label {
+            font-size 12px;
+            opacity 0.8;
+            margin-bottom 5px;
+        }
+        
+        .status-value {
+            font-size 16px;
+            font-weight bold;
+        }
+        
+        .container {
+            height calc(100vh - 80px);
+            position relative;
+            overflow hidden;
+        }
+        
+        .pbi-frame {
+            width 100%;
+            height 100%;
+            border none;
+            position absolute;
+            top 0;
+            left 0;
+            opacity 0;
+            transform translateX(100%);
+            transition all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .pbi-frame.active {
+            opacity 1;
+            transform translateX(0);
+        }
+        
+        .pbi-frame.exit {
+            opacity 0;
+            transform translateX(-100%);
+        }
+        
+        .loading {
+            position absolute;
+            top 50%;
+            left 50%;
+            transform translate(-50%, -50%);
+            text-align center;
+            z-index 1000;
+        }
+        
+        .spinner {
+            width 50px;
+            height 50px;
+            border 4px solid rgba(255, 255, 255, 0.3);
+            border-top 4px solid white;
+            border-radius 50%;
+            animation spin 1s linear infinite;
+            margin 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform rotate(0deg); }
+            100% { transform rotate(360deg); }
+        }
+        
+        .progress-bar {
+            position fixed;
+            bottom 0;
+            left 0;
+            height 4px;
+            background rgba(255, 255, 255, 0.3);
+            width 100%;
+        }
+        
+        .progress-fill {
+            height 100%;
+            background linear-gradient(90deg, #00d4ff, #090979);
+            width 0%;
+            transition width 1s linear;
+        }
+        
+        .report-indicator {
+            position absolute;
+            top 20px;
+            right 30px;
+            background rgba(0, 0, 0, 0.7);
+            padding 10px 20px;
+            border-radius 25px;
+            font-size 14px;
+            backdrop-filter blur(10px);
+            border 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width 768px) {
+            .header {
+                flex-direction column;
+                gap 15px;
+                padding 15px;
+            }
+            
+            .status-info {
+                gap 20px;
+            }
+            
+            .container {
+                height calc(100vh - 120px);
+            }
+        }
+    style
+head
+body
+    div class=header
+        div class=logo📊 Dashboard Corporativodiv
+        div class=status-info
+            div class=status-item
+                div class=status-labelHora Actualdiv
+                div class=status-value id=currentTime----div
+            div
+            div class=status-item
+                div class=status-labelInforme Activodiv
+                div class=status-value id=activeReportInforme 1div
+            div
+            div class=status-item
+                div class=status-labelPróxima Recargadiv
+                div class=status-value id=nextReload----div
+            div
+        div
+    div
+    
+    div class=container
+        div class=loading id=loading
+            div class=spinnerdiv
+            pCargando informes...p
+        div
+        
+        div class=report-indicator id=reportIndicator
+            Informe 1 de 4
+        div
+        
+        !-- Aquí van tus 4 iframes de Power BI configurados --
+        iframe id=frame1 class=pbi-frame src=httpsapp.powerbi.comviewr=eyJrIjoiZDNlODIxMjctOTVmOS00ODZjLTg0NzMtMzk0MDk3NzQwY2I4IiwidCI6ImQwNTk0YjNlLTRlODktNDdjOC1hYmI0LTE5NjU1ODE1MjQ0MyIsImMiOjR9iframe
+        iframe id=frame2 class=pbi-frame src=httpsapp.powerbi.comviewr=eyJrIjoiOThjNTNjMGItMDg2NC00NmUxLTg0NTEtZjNkZDliZmE2OGJlIiwidCI6ImQwNTk0YjNlLTRlODktNDdjOC1hYmI0LTE5NjU1ODE1MjQ0MyIsImMiOjR9iframe
+        iframe id=frame3 class=pbi-frame src=httpsapp.powerbi.comviewr=eyJrIjoiMzk3Y2IyMTQtYTdjNy00MmNjLWE5YTgtMTg4NWFiMjZkMTMzIiwidCI6ImQwNTk0YjNlLTRlODktNDdjOC1hYmI0LTE5NjU1ODE1MjQ0MyIsImMiOjR9iframe
+        iframe id=frame4 class=pbi-frame src=httpsapp.powerbi.comviewr=eyJrIjoiNzBlMzhhNWUtNWFlZi00NzI2LTgzNTUtM2VmODY4NzY3ZjdhIiwidCI6ImQwNTk0YjNlLTRlODktNDdjOC1hYmI0LTE5NjU1ODE1MjQ0MyIsImMiOjR9iframe
+    div
+    
+    div class=progress-bar
+        div class=progress-fill id=progressFilldiv
+    div
+
+    script
+        class PowerBIDashboard {
+            constructor() {
+                 CONFIGURA AQUÍ TUS LINKS DE POWER BI
+                this.pbiUrls = [
+                    AQUI_VA_TU_LINK_PBI_1,
+                    AQUI_VA_TU_LINK_PBI_2, 
+                    AQUI_VA_TU_LINK_PBI_3,
+                    AQUI_VA_TU_LINK_PBI_4
+                ];
+                
+                 Nombres de tus informes (opcional, para mostrar en la UI)
+                this.reportNames = [
+                    Ventas Diarias,
+                    Indicadores KPI, 
+                    Análisis Financiero,
+                    Operaciones
+                ];
+                
+                this.currentReport = 0;
+                this.reloadInterval = 30  60  1000;  30 minutos
+                this.reportChangeInterval = 15  60  1000;  Cambiar cada 15 minutos
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupFrames();
+                this.updateTime();
+                this.calculateNextReload();
+                this.startRotation();
+                this.startReloadTimer();
+                this.hideLoading();
+                
+                 Actualizar tiempo cada segundo
+                setInterval(() = this.updateTime(), 1000);
+                setInterval(() = this.updateProgress(), 1000);
+            }
+            
+            setupFrames() {
+                 Configurar los URLs en los iframes
+                this.pbiUrls.forEach((url, index) = {
+                    const frame = document.getElementById(`frame${index + 1}`);
+                    if (frame && url !== `AQUI_VA_TU_LINK_PBI_${index + 1}`) {
+                        frame.src = url;
+                    }
+                });
+                
+                 Mostrar el primer informe
+                this.showReport(0);
+            }
+            
+            showReport(index) {
+                const frames = document.querySelectorAll('.pbi-frame');
+                
+                 Ocultar todos los frames
+                frames.forEach((frame, i) = {
+                    frame.classList.remove('active', 'exit');
+                    if (i === this.currentReport && i !== index) {
+                        frame.classList.add('exit');
+                    }
+                });
+                
+                 Mostrar el frame activo después de un pequeño delay
+                setTimeout(() = {
+                    const activeFrame = document.getElementById(`frame${index + 1}`);
+                    if (activeFrame) {
+                        activeFrame.classList.add('active');
+                    }
+                    
+                    this.currentReport = index;
+                    this.updateUI();
+                }, 400);
+            }
+            
+            startRotation() {
+                setInterval(() = {
+                    const nextReport = (this.currentReport + 1) % this.pbiUrls.length;
+                    this.showReport(nextReport);
+                }, this.reportChangeInterval);
+            }
+            
+            startReloadTimer() {
+                setInterval(() = {
+                    this.reloadPage();
+                }, this.reloadInterval);
+            }
+            
+            reloadPage() {
+                 Mostrar indicador de recarga
+                const loading = document.getElementById('loading');
+                loading.style.display = 'block';
+                
+                setTimeout(() = {
+                    window.location.reload();
+                }, 2000);
+            }
+            
+            updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES', { 
+                    hour '2-digit', 
+                    minute '2-digit',
+                    second '2-digit'
+                });
+                document.getElementById('currentTime').textContent = timeString;
+            }
+            
+            calculateNextReload() {
+                const now = new Date();
+                const nextReload = new Date(now.getTime() + this.reloadInterval);
+                const reloadString = nextReload.toLocaleTimeString('es-ES', { 
+                    hour '2-digit', 
+                    minute '2-digit' 
+                });
+                document.getElementById('nextReload').textContent = reloadString;
+            }
+            
+            updateUI() {
+                const reportName = this.reportNames[this.currentReport]  `Informe ${this.currentReport + 1}`;
+                document.getElementById('activeReport').textContent = reportName;
+                document.getElementById('reportIndicator').textContent = `${reportName} (${this.currentReport + 1} de ${this.pbiUrls.length})`;
+            }
+            
+            updateProgress() {
+                const now = new Date();
+                const startTime = new Date(now.getTime() - (now.getTime() % this.reportChangeInterval));
+                const elapsed = now.getTime() - startTime.getTime();
+                const progress = (elapsed  this.reportChangeInterval)  100;
+                
+                document.getElementById('progressFill').style.width = `${progress}%`;
+            }
+            
+            hideLoading() {
+                setTimeout(() = {
+                    document.getElementById('loading').style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+         Inicializar cuando la página cargue
+        window.addEventListener('load', () = {
+            new PowerBIDashboard();
+        });
+        
+         Manejar errores de carga de iframes
+        window.addEventListener('error', (e) = {
+            console.log('Error cargando recurso', e);
+        });
+    script
+body
+html
