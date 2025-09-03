@@ -258,27 +258,27 @@
                 const currentMinute = now.getMinutes();
                 const currentTime = currentHour * 60 + currentMinute;
                 
-                // Convertir horarios programados a minutos
-                const scheduleMinutes = this.scheduleHours.map(time => time.hour * 60 + time.minute);
-                
                 console.log(`Hora actual: ${currentHour}:${currentMinute.toString().padStart(2, '0')} (${currentTime} minutos)`);
-                console.log('Horarios programados:', scheduleMinutes);
                 
-                // Encontrar el informe actual basado en la hora
+                // Definir rangos de tiempo más claros
                 let reportIndex = 0;
                 
-                // Lógica más clara: encontrar el último horario que ya pasó
-                for (let i = 0; i < scheduleMinutes.length; i++) {
-                    if (currentTime >= scheduleMinutes[i]) {
-                        reportIndex = i;
-                        console.log(`Horario ${scheduleMinutes[i]} ya pasó, asignando informe ${i + 1}`);
-                    }
-                }
-                
-                // Caso especial: si es muy temprano (antes de las 6:55 AM), mostrar el nocturno
-                if (currentTime < scheduleMinutes[0]) {
-                    reportIndex = 3; // Informe nocturno
-                    console.log(`Es muy temprano (antes de 6:55 AM), mostrando informe nocturno`);
+                if (currentTime >= 55 && currentTime < 415) {
+                    // 12:55 AM - 6:54 AM → Nocturno
+                    reportIndex = 3;
+                    console.log(`Rango nocturno (12:55-6:54), mostrando informe 4`);
+                } else if (currentTime >= 415 && currentTime < 775) {
+                    // 6:55 AM - 12:54 PM → Matutino  
+                    reportIndex = 0;
+                    console.log(`Rango matutino (6:55-12:54), mostrando informe 1`);
+                } else if (currentTime >= 775 && currentTime < 1135) {
+                    // 12:55 PM - 6:54 PM → Mediodía
+                    reportIndex = 1;
+                    console.log(`Rango mediodía (12:55-18:54), mostrando informe 2`);
+                } else if (currentTime >= 1135 || currentTime < 55) {
+                    // 6:55 PM - 12:54 AM → Vespertino
+                    reportIndex = 2;
+                    console.log(`Rango vespertino (18:55-0:54), mostrando informe 3`);
                 }
                 
                 console.log(`Informe seleccionado: ${reportIndex + 1} (${this.reportNames[reportIndex]})`);
