@@ -261,16 +261,27 @@
                 // Convertir horarios programados a minutos
                 const scheduleMinutes = this.scheduleHours.map(time => time.hour * 60 + time.minute);
                 
+                console.log(`Hora actual: ${currentHour}:${currentMinute.toString().padStart(2, '0')} (${currentTime} minutos)`);
+                console.log('Horarios programados:', scheduleMinutes);
+                
                 // Encontrar el informe actual basado en la hora
                 let reportIndex = 0;
-                for (let i = scheduleMinutes.length - 1; i >= 0; i--) {
-                    if (currentTime >= scheduleMinutes[i] || 
-                        (i === 3 && currentTime < scheduleMinutes[0])) { // Para el horario nocturno que cruza medianoche
+                
+                // Lógica más clara: encontrar el último horario que ya pasó
+                for (let i = 0; i < scheduleMinutes.length; i++) {
+                    if (currentTime >= scheduleMinutes[i]) {
                         reportIndex = i;
-                        break;
+                        console.log(`Horario ${scheduleMinutes[i]} ya pasó, asignando informe ${i + 1}`);
                     }
                 }
                 
+                // Caso especial: si es muy temprano (antes de las 6:55 AM), mostrar el nocturno
+                if (currentTime < scheduleMinutes[0]) {
+                    reportIndex = 3; // Informe nocturno
+                    console.log(`Es muy temprano (antes de 6:55 AM), mostrando informe nocturno`);
+                }
+                
+                console.log(`Informe seleccionado: ${reportIndex + 1} (${this.reportNames[reportIndex]})`);
                 this.currentReport = reportIndex;
             }
             
