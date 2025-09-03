@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Corporativo - Informes Power BI</title>
+    <title>Dashboard Corporativo v2.1 - Informes Power BI</title>
     <style>
         * {
             margin: 0;
@@ -154,7 +154,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">📊 Dashboard Corporativo</div>
+        <div class="logo">📊 Dashboard Corporativo v2.1</div>
         <div class="status-info">
             <div class="status-item">
                 <div class="status-label">Hora Actual</div>
@@ -222,6 +222,7 @@
                 this.currentReport = 0;
                 this.reloadInterval = 30 * 60 * 1000; // 30 minutos
                 
+                console.log("=== DASHBOARD CORPORATIVO v2.1 INICIADO ===");
                 this.init();
             }
             
@@ -240,11 +241,13 @@
             }
             
             setupFrames() {
+                console.log("=== CONFIGURANDO FRAMES ===");
                 // Configurar los URLs en los iframes
                 this.pbiUrls.forEach((url, index) => {
                     const frame = document.getElementById(`frame${index + 1}`);
                     if (frame) {
                         frame.src = url;
+                        console.log(`Frame ${index + 1} configurado: ${url.substring(0, 60)}...`);
                     }
                 });
                 
@@ -258,6 +261,7 @@
                 const currentMinute = now.getMinutes();
                 const currentTime = currentHour * 60 + currentMinute;
                 
+                console.log(`=== DETERMINANDO INFORME ACTUAL ===`);
                 console.log(`Hora actual: ${currentHour}:${currentMinute.toString().padStart(2, '0')} (${currentTime} minutos)`);
                 
                 // Definir rangos de tiempo más claros
@@ -282,6 +286,7 @@
                 }
                 
                 console.log(`Informe seleccionado: ${reportIndex + 1} (${this.reportNames[reportIndex]})`);
+                console.log(`Link que debería mostrar: ${this.pbiUrls[reportIndex]}`);
                 this.currentReport = reportIndex;
             }
             
@@ -296,7 +301,7 @@
                     this.scheduleHours.forEach((schedule, index) => {
                         if (schedule.hour === currentHour && schedule.minute === currentMinute) {
                             if (this.currentReport !== index) {
-                                console.log(`Cambiando a informe ${index + 1} según horario programado`);
+                                console.log(`🕐 CAMBIO PROGRAMADO: ${currentHour}:${currentMinute} - Cambiando a informe ${index + 1}`);
                                 this.showReport(index);
                             }
                         }
@@ -305,13 +310,26 @@
             }
             
             showReport(index) {
+                console.log(`=== CAMBIANDO A INFORME ${index + 1} ===`);
+                console.log(`Nombre: ${this.reportNames[index]}`);
+                console.log(`URL esperada: ${this.pbiUrls[index]}`);
+                console.log(`Frame objetivo: frame${index + 1}`);
+                
                 const frames = document.querySelectorAll('.pbi-frame');
+                console.log(`Total frames encontrados: ${frames.length}`);
+                
+                // Verificar estado actual de todos los frames
+                frames.forEach((frame, i) => {
+                    const isActive = frame.classList.contains('active');
+                    console.log(`Frame ${i + 1}: ${isActive ? 'ACTIVO' : 'inactivo'} - src: ${frame.src.substring(50, 80)}...`);
+                });
                 
                 // Ocultar todos los frames
                 frames.forEach((frame, i) => {
                     frame.classList.remove('active', 'exit');
                     if (i === this.currentReport && i !== index) {
                         frame.classList.add('exit');
+                        console.log(`❌ Ocultando frame ${i + 1}`);
                     }
                 });
                 
@@ -320,39 +338,39 @@
                     const activeFrame = document.getElementById(`frame${index + 1}`);
                     if (activeFrame) {
                         activeFrame.classList.add('active');
+                        console.log(`✅ ACTIVANDO frame${index + 1}`);
+                        console.log(`✅ URL final: ${activeFrame.src}`);
+                        
+                        // Verificar que es realmente el frame correcto
+                        const expectedUrl = this.pbiUrls[index];
+                        if (activeFrame.src === expectedUrl) {
+                            console.log(`✅ URL CORRECTA CONFIRMADA`);
+                        } else {
+                            console.error(`❌ ERROR URL: Esperaba ${expectedUrl} pero tiene ${activeFrame.src}`);
+                        }
+                    } else {
+                        console.error(`❌ ERROR: No se encontró frame${index + 1}`);
                     }
                     
                     this.currentReport = index;
                     this.updateUI();
+                    
+                    // Verificación final
+                    setTimeout(() => {
+                        const finalCheck = document.querySelector('.pbi-frame.active');
+                        if (finalCheck) {
+                            console.log(`🔍 VERIFICACIÓN FINAL: Frame activo es ${finalCheck.id} con URL ${finalCheck.src.substring(50, 80)}...`);
+                        } else {
+                            console.error(`❌ ERROR CRÍTICO: NO HAY FRAME ACTIVO`);
+                        }
+                    }, 500);
+                    
                 }, 400);
             }
             
             startRotation() {
                 // Ya no se usa rotación automática por tiempo
                 // Los cambios se manejan por horario específico en startScheduleCheck()
-            }
-            
-            getNextScheduledTime() {
-                const now = new Date();
-                const currentTime = now.getHours() * 60 + now.getMinutes();
-                
-                // Encontrar el próximo horario programado
-                const scheduleMinutes = this.scheduleHours.map(time => time.hour * 60 + time.minute);
-                
-                let nextSchedule = null;
-                for (let i = 0; i < scheduleMinutes.length; i++) {
-                    if (scheduleMinutes[i] > currentTime) {
-                        nextSchedule = this.scheduleHours[i];
-                        break;
-                    }
-                }
-                
-                // Si no hay más horarios hoy, el próximo es el primero de mañana
-                if (!nextSchedule) {
-                    nextSchedule = this.scheduleHours[0];
-                }
-                
-                return nextSchedule;
             }
             
             startReloadTimer() {
@@ -362,6 +380,7 @@
             }
             
             reloadPage() {
+                console.log("🔄 RECARGA AUTOMÁTICA INICIADA");
                 // Mostrar indicador de recarga
                 const loading = document.getElementById('loading');
                 loading.style.display = 'block';
@@ -400,7 +419,7 @@
                 document.getElementById('activeReport').textContent = reportName;
                 document.getElementById('reportIndicator').textContent = `${reportName} (${this.currentReport + 1} de ${this.pbiUrls.length})`;
                 
-                console.log(`UI actualizada con: ${reportName}`);
+                console.log(`✅ UI actualizada con: ${reportName}`);
             }
             
             updateProgress() {
@@ -457,7 +476,7 @@
         
         // Manejar errores de carga de iframes
         window.addEventListener('error', (e) => {
-            console.log('Error cargando recurso:', e);
+            console.log('⚠️ Error cargando recurso:', e);
         });
     </script>
 </body>
