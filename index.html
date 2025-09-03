@@ -393,8 +393,14 @@
             
             updateUI() {
                 const reportName = this.reportNames[this.currentReport] || `Informe ${this.currentReport + 1}`;
+                console.log(`=== ACTUALIZANDO UI ===`);
+                console.log(`Nombre del informe: ${reportName}`);
+                console.log(`Índice actual: ${this.currentReport}`);
+                
                 document.getElementById('activeReport').textContent = reportName;
                 document.getElementById('reportIndicator').textContent = `${reportName} (${this.currentReport + 1} de ${this.pbiUrls.length})`;
+                
+                console.log(`UI actualizada con: ${reportName}`);
             }
             
             updateProgress() {
